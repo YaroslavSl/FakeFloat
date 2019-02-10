@@ -17,7 +17,6 @@ struct sFakeFloat {
     int8_t shift; // right shift values (use negative for left shift)
 };
 
-void add(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
-int test(void);
+void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
 
 #endif /* fakefloat_h */

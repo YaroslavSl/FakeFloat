@@ -8,28 +8,33 @@
 #include "fakefloat.h"
 #include <stdio.h>
 
-void add(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
-int test(void);
+void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
 
-void add(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result) {
-    int16_t tmp = a.num;               // 1/16 + 1/2 : 1
+void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result) {
+    int64_t tmp;
     // compare b.shift and a.shift and << >>
-    tmp = tmp << (b.shift - a.shift);  // 4 - 1: 1<<3 : 8
-//
-    tmp = tmp + b.num;                 // : 9
+    if (b.shift > a.shift) {
+        tmp = a.num;
+        tmp = tmp << (b.shift - a.shift);
+        tmp = tmp + b.num;
+        result->shift = b.shift;
+    } else {
+        tmp = b.num;
+        tmp = tmp << (a.shift - b.shift);
+        tmp = tmp + a.num;
+        result->shift = a.shift;
+    }
 
-    printf("%d\n", tmp);
+    printf("tmp=%lld\n", tmp);
 
-    result->shift = b.shift;           // 4
-    printf("%d\n", result->shift);
-    while (tmp > INT8_MAX || tmp < -INT8_MAX) {
+    while (tmp > INT32_MAX || tmp < -INT32_MAX) {
         tmp = tmp >> 1;
         result->shift--;
     }
-    printf("%d\n", result->shift);
+    printf("result.shift=%d\n", result->shift);
 
-    result->num = b.num;
-    printf("%d\n", result->num);
+    result->num = (int32_t)tmp;
+    printf("result->num=%d\n", result->num);
 
     //return 0;
 }
