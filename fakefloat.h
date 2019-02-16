@@ -18,5 +18,7 @@ struct sFakeFloat {
 };
 
 void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
+void ffMult(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
+void ffDevide(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
 
 #endif /* fakefloat_h */

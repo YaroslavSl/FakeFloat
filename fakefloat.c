@@ -7,8 +7,11 @@
 //
 #include "fakefloat.h"
 #include <stdio.h>
+#include <assert.h>
 
 void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
+void ffMult(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
+void ffDevide(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
 
 void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result) {
     int64_t tmp;
@@ -25,21 +28,20 @@ void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result) 
         result->shift = a.shift;
     }
 
-    printf("tmp=%lld\n", tmp);
+    //printf("tmp=%lld\n", tmp);
 
     while (tmp > INT32_MAX || tmp < -INT32_MAX) {
         tmp = tmp >> 1;
         result->shift--;
     }
-    printf("result.shift=%d\n", result->shift);
+    //printf("result.shift=%d\n", result->shift);
 
     result->num = (int32_t)tmp;
-    printf("result->num=%d\n", result->num);
+    //printf("result->num=%d\n", result->num);
 
-    //return 0;
 }
 
-void mult(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result){
+void ffMult(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result) {
     int64_t tmp;
     tmp = a.num;
     tmp = tmp * b.num;
@@ -47,11 +49,28 @@ void mult(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result){
     result->shift = 0;
     while (tmp > INT32_MAX || tmp < -INT32_MAX) {
         tmp = tmp >> 1;
-        result->shift--; }
-    result->num = tmp;
+        result->shift--;
+    }
+    result->num = (int32_t) tmp;
     
-    //tmp = a.shift + b.shift;
-    //ASSERT(tmp < INT8_MAX);
-    //result->num = tmp;
+    tmp = a.shift + b.shift + result->shift;
+    assert(tmp < INT8_MAX);
+    result->shift = (int32_t) tmp;
 }
 
+void ffDevide(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result) {
+    int64_t tmp;
+    tmp = a.num;
+    tmp = tmp / b.num;
+    
+    result->shift = 0;
+    while (tmp > INT32_MAX || tmp < -INT32_MAX) {
+        tmp = tmp >> 1;
+        result->shift--;
+    }
+    result->num = (int32_t) tmp;
+    
+    tmp = a.shift - b.shift + result->shift;
+    assert(tmp < INT8_MAX);
+    result->shift = (int32_t) tmp;
+}
