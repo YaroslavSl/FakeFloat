@@ -3,13 +3,11 @@
 //  fakefloat
 //
 //  Created by Yaroslav on 1/22/19.
-//  Copyright © 2019 Yaroslav. All rights reserved.
+//  MIT License 
 //
 
 #ifndef fakefloat_h
 #define fakefloat_h
-
-#include <stdint.h>
 
 //floatingPointValue = num / 2^shift;
 struct sFakeFloat {
@@ -17,8 +15,8 @@ struct sFakeFloat {
     int8_t shift; // right shift values (use negative for left shift)
 };
 
-void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
-void ffMult(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
-void ffDevide(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
+extern void ffAdd(struct sFakeFloat *a, struct sFakeFloat *b, struct sFakeFloat *result);
+extern void ffMult(struct sFakeFloat *a, struct sFakeFloat *b, struct sFakeFloat *result);
+extern void ffDivide(struct sFakeFloat *a, struct sFakeFloat *b, struct sFakeFloat *result);
 
 #endif /* fakefloat_h */
