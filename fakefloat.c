@@ -3,29 +3,28 @@
 //  fakefloat
 //
 //  Created by Yaroslav on 1/22/19.
-//  Copyright © 2019 Yaroslav. All rights reserved.
+//  MIT License 
 //
 #include "fakefloat.h"
-#include <stdio.h>
-#include <assert.h>
+//#include <assert.h>
 
-void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
-void ffMult(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
-void ffDevide(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result);
+void ffAdd(struct sFakeFloat *a, struct sFakeFloat *b, struct sFakeFloat *result);
+void ffMult(struct sFakeFloat *a, struct sFakeFloat *b, struct sFakeFloat *result);
+void ffDivide(struct sFakeFloat *a, struct sFakeFloat *b, struct sFakeFloat *result);
 
-void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result) {
+void ffAdd(struct sFakeFloat *a, struct sFakeFloat *b, struct sFakeFloat *result) {
     int64_t tmp;
     // compare b.shift and a.shift and << >>
-    if (b.shift > a.shift) {
-        tmp = a.num;
-        tmp = tmp << (b.shift - a.shift);
-        tmp = tmp + b.num;
-        result->shift = b.shift;
+    if (b->shift > a->shift) {
+        tmp = a->num;
+        tmp = tmp << (b->shift - a->shift);
+        tmp = tmp + b->num;
+        result->shift = b->shift;
     } else {
-        tmp = b.num;
-        tmp = tmp << (a.shift - b.shift);
-        tmp = tmp + a.num;
-        result->shift = a.shift;
+        tmp = b->num;
+        tmp = tmp << (a->shift - b->shift);
+        tmp = tmp + a->num;
+        result->shift = a->shift;
     }
 
     //printf("tmp=%lld\n", tmp);
@@ -38,13 +37,12 @@ void ffAdd(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result) 
 
     result->num = (int32_t)tmp;
     //printf("result->num=%d\n", result->num);
-
 }
 
-void ffMult(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result) {
+void ffMult(struct sFakeFloat *a, struct sFakeFloat *b, struct sFakeFloat *result) {
     int64_t tmp;
-    tmp = a.num;
-    tmp = tmp * b.num;
+    tmp = a->num;
+    tmp = tmp * b->num;
     
     result->shift = 0;
     while (tmp > INT32_MAX || tmp < -INT32_MAX) {
@@ -53,15 +51,15 @@ void ffMult(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result)
     }
     result->num = (int32_t) tmp;
     
-    tmp = a.shift + b.shift + result->shift;
-    assert(tmp < INT8_MAX);
+    tmp = a->shift + b->shift + result->shift;
+    //assert(tmp < INT8_MAX);
     result->shift = (int32_t) tmp;
 }
 
-void ffDevide(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *result) {
+void ffDivide(struct sFakeFloat *a, struct sFakeFloat *b, struct sFakeFloat *result) {
     int64_t tmp;
-    tmp = a.num;
-    tmp = tmp / b.num;
+    tmp = a->num;
+    tmp = tmp / b->num;
     
     result->shift = 0;
     while (tmp > INT32_MAX || tmp < -INT32_MAX) {
@@ -70,7 +68,7 @@ void ffDevide(struct sFakeFloat a, struct sFakeFloat b, struct sFakeFloat *resul
     }
     result->num = (int32_t) tmp;
     
-    tmp = a.shift - b.shift + result->shift;
-    assert(tmp < INT8_MAX);
+    tmp = a->shift - b->shift + result->shift;
+    //assert(tmp < INT8_MAX);
     result->shift = (int32_t) tmp;
 }
