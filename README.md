@@ -2,6 +2,7 @@
 Library of float number representation through integer 
 
 # How to use
+```c
 #include "fakefloat.h"
 
 const struct sFakeFloat a = { 
@@ -21,3 +22,4 @@ int main(int argc, const char * argv[]) {
 
     return 0;
 }
+```
